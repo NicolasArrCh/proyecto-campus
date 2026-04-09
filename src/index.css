@@ -1,0 +1,391 @@
+:root {
+  --color-bg-primary: #0a0f1c; /* Deep deep navy blue */
+  --color-bg-secondary: #131b2f;
+  --color-text-primary: #f0f4fc;
+  --color-text-secondary: #a0a8ba;
+  --color-accent-gold: #e2c070; /* Elegant gold */
+  --color-accent-blue: #3b82f6; /* Modern bright blue */
+  --color-glass-bg: rgba(19, 27, 47, 0.4);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  
+  --font-primary: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* App Content Styles */
+.app-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+  /* Prevent pointer events before it's visible, but ensure they work after */
+  pointer-events: none; 
+}
+
+.app-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ====================
+   Section Background Animations
+==================== */
+section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+  position: relative;
+  z-index: 1; /* Ensure content is above the absolute orbs */
+}
+
+/* Base class for animated background elements per section */
+.section-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.orb-primary {
+  width: 500px;
+  height: 500px;
+  background: var(--color-accent-blue);
+  top: -10%;
+  left: -20%;
+  animation: floatOrb 25s ease-in-out infinite alternate;
+}
+
+.orb-secondary {
+  width: 600px;
+  height: 600px;
+  background: var(--color-accent-gold);
+  bottom: -20%;
+  right: -20%;
+  opacity: 0.08; /* Less intense for gold to keep it professional */
+  animation: floatOrbReverse 30s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 100px) scale(1.1); }
+  100% { transform: translate(-50px, -50px) scale(0.9); }
+}
+
+@keyframes floatOrbReverse {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-80px, -50px) scale(1.1); }
+  100% { transform: translate(40px, 80px) scale(0.95); }
+}
+
+/* ====================
+   Header & Navbar
+==================== */
+.main-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 3rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-glass-border);
+}
+
+.nav-brand {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  background: linear-gradient(to right, #ffffff, var(--color-accent-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ====================
+   Buttons
+==================== */
+button {
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-accent-blue), #2563eb);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-accent-gold);
+  border: 2px solid var(--color-accent-gold);
+  padding: 0.75rem 1.5rem;
+}
+.btn-secondary:hover {
+  background: rgba(226, 192, 112, 0.1);
+  transform: translateY(-2px);
+}
+
+/* ====================
+   Hero Section
+==================== */
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  min-height: 80vh;
+}
+
+.hero-content {
+  flex: 1;
+}
+
+.hero-title {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-primary);
+}
+
+.hero-description {
+  font-size: 1.45rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  margin-bottom: 2.5rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.hero-mascot-placeholder {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mascot-box {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--color-text-secondary);
+  background: var(--color-glass-bg);
+}
+
+/* ====================
+   Titles & Cards
+==================== */
+.section-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+}
+
+.section-description {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 1.35rem;
+  line-height: 1.6;
+  margin-bottom: 3.5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.programs-grid, .jornada-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.program-card, .jornada-card {
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  padding: 2.5rem;
+  border-radius: 16px;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Serious, Professional Light Glow Hover */
+.program-card:hover, .jornada-card:hover {
+  transform: translateY(-8px);
+  /* Subdued but elegant glow: multiple shadows for depth */
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(59, 130, 246, 0.3),
+    inset 0 0 10px rgba(226, 192, 112, 0.05); /* very soft inner light */
+  border-color: rgba(59, 130, 246, 0.5); /* blueish border illumination */
+}
+
+.program-card h3, .jornada-card h3 {
+  color: var(--color-accent-gold);
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  line-height: 1.3;
+}
+
+.program-card p, .jornada-card p {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.jornada-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.jornada-card p strong {
+  color: var(--color-accent-blue);
+}
+
+.formations-list-container {
+  margin-top: 4rem;
+}
+
+/* ====================
+   Campus Section
+==================== */
+.campus-info {
+  background: linear-gradient(180deg, var(--color-glass-bg) 0%, transparent 100%);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 16px;
+  padding: 3rem;
+}
+
+.campus-description {
+  font-size: 1.4rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.campus-features {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.campus-features li {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  border-radius: 12px;
+  line-height: 1.7;
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+}
+
+.campus-features li strong {
+  display: block;
+  color: var(--color-accent-blue);
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+}
+
+/* ====================
+   Footer CTA
+==================== */
+.cta-footer {
+  text-align: center;
+  padding: 6rem 2rem;
+  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-description {
+  color: var(--color-text-secondary);
+  font-size: 1.35rem;
+  margin-bottom: 3.5rem;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-contact {
+  padding: 1rem 2rem;
+  border: 1px solid var(--color-glass-border);
+  background: var(--color-glass-bg);
+  color: white;
+  border-radius: 8px;
+  font-size: 1.1rem;
+}
+
+.btn-contact:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ====================
+   Responsive
+==================== */
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 3rem;
+  }
+  
+  .hero-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .main-navbar {
+    flex-direction: column-reverse;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+

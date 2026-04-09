@@ -1,0 +1,199 @@
+/* Container for the entire loading screen */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--color-bg-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+  overflow: hidden;
+}
+
+/* Visibility states */
+.loading-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  max-width: 400px;
+  width: 90%;
+}
+
+/* -----------------------------
+   Framer Motion Logo Animation
+------------------------------ */
+.logo-wrapper {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin-bottom: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Perspective enables true 3D rotations for the rings */
+  perspective: 1000px; 
+}
+
+.orbital-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.02); /* Extremely subtle path */
+  box-sizing: border-box;
+}
+
+.ring-1 {
+  border-top: 35px solid var(--color-accent-blue);
+  border-bottom: 18px solid rgba(226, 192, 112, 0.6); /* Semi-transparent gold */
+  filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.8)) blur(0.5px);
+  background: transparent;
+  mask: none;
+  -webkit-mask: none;
+}
+
+.ring-2 {
+  width: 125%;
+  height: 125%;
+  border-right: 35px solid var(--color-accent-gold);
+  border-left: 18px solid rgba(59, 130, 246, 0.6); /* Semi-transparent blue */
+  filter: drop-shadow(0 0 15px rgba(226, 192, 112, 0.8)) blur(0.5px);
+  background: transparent;
+  mask: none;
+  -webkit-mask: none;
+}
+
+.main-logo-img {
+  position: relative;
+  width: 75%;
+  height: 75%;
+  object-fit: contain;
+  z-index: 5;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.15));
+}
+
+/* Base glowing sphere behind the logo */
+.logo-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* -----------------------------
+   Text Styles
+------------------------------ */
+.text-container {
+  text-align: center;
+  margin-bottom: 2rem;
+  min-height: 80px; /* Prevent layout jump */
+}
+
+.brand-title {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+  animation: fadeUp 1s ease-out forwards;
+}
+
+.gold-text {
+  color: var(--color-accent-gold);
+}
+
+.status-text {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  font-weight: 300;
+  animation: fadeInOut 2s ease-in-out infinite alternate;
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+
+/* -----------------------------
+   Ambient Background Glows
+------------------------------ */
+.ambient-glow {
+  position: absolute;
+  width: 50vw;
+  height: 50vw;
+  filter: blur(120px);
+  opacity: 0.3;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.glow-top {
+  top: -25vw;
+  right: -10vw;
+  background: var(--color-accent-blue);
+  animation: drift 15s ease-in-out infinite alternate;
+}
+
+.glow-bottom {
+  bottom: -25vw;
+  left: -10vw;
+  background: var(--color-accent-gold);
+  opacity: 0.15;
+  animation: drift-reverse 20s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-5%, 5%); }
+}
+
+@keyframes drift-reverse {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(5%, -5%); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brand-title {
+    font-size: 1.75rem;
+  }
+  .spinner-container {
+    width: 100px;
+    height: 100px;
+  }
+  .status-text {
+    font-size: 0.9rem;
+  }
+}
