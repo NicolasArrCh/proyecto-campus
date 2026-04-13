@@ -34,16 +34,18 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isVisible }) => {
         
         {/* Modern Framer Motion Logo */}
         <div className="logo-wrapper">
-          {/* Orbital Rings */}
+          {/* Orbital Rings - Statics on X/Y axis but rotating on Z */}
           <motion.div 
             className="orbital-ring ring-1"
-            animate={{ rotateX: 360, rotateY: 180, rotateZ: 360 }}
-            transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+            initial={{ rotateX: 70, rotateY: 30, rotateZ: 0 }}
+            animate={{ rotateX: 70, rotateY: 30, rotateZ: 360 }}
+            transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
           />
           <motion.div 
             className="orbital-ring ring-2"
-            animate={{ rotateX: -360, rotateY: 360, rotateZ: -180 }}
-            transition={{ repeat: Infinity, duration: 14, ease: "linear" }}
+            initial={{ rotateX: 65, rotateY: -45, rotateZ: 0 }}
+            animate={{ rotateX: 65, rotateY: -45, rotateZ: -360 }}
+            transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
           />
           
           {/* Main Floating Logo Image */}
