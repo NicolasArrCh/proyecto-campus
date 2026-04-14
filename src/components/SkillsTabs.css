@@ -37,14 +37,27 @@
 }
 
 .skills-tab-btn.active {
-  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
   color: #fff;
-  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.45);
+  box-shadow: 0 4px 18px rgba(56,189,248,0.40);
 }
 
 /* ── Tab panel base ─────────────────────────── */
 .tab-panel {
   width: 100%;
+}
+
+/* ── Enfoques section header ─────────────────── */
+.enfoques-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.enfoques-subtitle {
+  font-size: 1.35rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.6;
 }
 
 /* ── TÉCNICAS: 3-column category cards ───────── */
@@ -218,9 +231,33 @@
 }
 
 /* ── Responsive ───────────────────────────────── */
-@media (max-width: 640px) {
-  .skills-tab-bar { max-width: 100%; }
-  .skills-tab-btn { font-size: 0.78rem; padding: 0.5rem 0.6rem; }
+@media (max-width: 700px) {
+  .skills-tab-bar {
+    max-width: 100%;
+    border-radius: 14px;   /* pill wraps oddly at narrow widths */
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+  }
+  .skills-tab-btn {
+    font-size: 0.82rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 10px;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
   .tools-grid, .blandas-grid { grid-template-columns: repeat(2, 1fr); }
   .tecnicas-panel { grid-template-columns: 1fr; }
+  .enfoques-subtitle { font-size: 1.1rem; }
+}
+
+@media (max-width: 420px) {
+  .tools-grid, .blandas-grid { gap: 0.7rem; }
+  .tool-tile, .blanda-tile { padding: 1.1rem 0.7rem; }
+  .tool-icon-wrap { width: 52px; height: 52px; }
+  .blanda-icon-wrap { width: 46px; height: 46px; }
+  .tool-label, .blanda-label { font-size: 0.72rem; }
+  .enfoques-subtitle { font-size: 0.95rem; }
+  .icon-grid { gap: 0.4rem; }
+  .tile-label { font-size: 0.52rem; }
 }

@@ -103,6 +103,13 @@ const SkillsTabs = () => {
   return (
     <div className="skills-container">
 
+      {/* ── Enfoques title ──────────────────────── */}
+      <div className="enfoques-header">
+        <h2 className="section-title">Enfoques</h2>
+        <p className="enfoques-subtitle">Las habilidades que adquieres en cada ruta de especialización.</p>
+        <div className="title-underline" style={{ margin: '0 auto' }}></div>
+      </div>
+
       {/* ── Tab bar ─────────────────────────────────── */}
       <div className="skills-tab-bar">
         {(['tecnicas', 'herramientas', 'blandas'] as Tab[]).map((tab) => (

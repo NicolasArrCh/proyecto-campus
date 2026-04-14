@@ -1,8 +1,19 @@
 import { motion } from 'framer-motion';
-import { Clock, Calendar, BookOpen, ChevronRight, Sun, Moon } from 'lucide-react';
+import { Clock, Calendar, BookOpen, ChevronRight, Sun, Moon, Monitor } from 'lucide-react';
 import './FormationsList.css';
 
-const formations = [
+type Formation = {
+  id: string;
+  type: string;
+  icon: React.ReactNode;
+  schedules: string[];
+  duration: string;
+  courses: string[];
+  themeColor: string;
+  modalidades?: string[];
+};
+
+const formations: Formation[] = [
   {
     id: 'diurna',
     type: 'Jornada Diurna',
@@ -18,7 +29,8 @@ const formations = [
       'Inglés',
       'Habilidades adaptativas'
     ],
-    themeColor: 'blue'
+    themeColor: 'blue',
+    modalidades: ['Presencial']
   },
   {
     id: 'nocturna',
@@ -32,7 +44,8 @@ const formations = [
       'Desarrollo de software (programación e inteligencia artificial aplicada)',
       'Habilidades adaptativas'
     ],
-    themeColor: 'purple'
+    themeColor: 'purple',
+    modalidades: ['Presencial', 'Virtual']
   }
 ];
 
@@ -40,16 +53,14 @@ const containerVariants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.15
-    }
+    transition: { staggerChildren: 0.15 }
   }
 };
 
 const cardVariants = {
   hidden: { y: 40, opacity: 0 },
-  show: { 
-    y: 0, 
+  show: {
+    y: 0,
     opacity: 1,
     transition: { type: "spring" as const, stiffness: 100, damping: 15 }
   }
@@ -64,7 +75,7 @@ const FormationsList = () => {
         <div className="title-underline"></div>
       </div>
 
-      <motion.div 
+      <motion.div
         className="formations-grid"
         variants={containerVariants}
         initial="hidden"
@@ -72,11 +83,11 @@ const FormationsList = () => {
         viewport={{ once: true, margin: "-50px" }}
       >
         {formations.map((formation) => (
-          <motion.div 
-            key={formation.id} 
+          <motion.div
+            key={formation.id}
             className={`formation-card theme-${formation.themeColor}`}
             variants={cardVariants}
-            whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3 } }}
+            whileHover={{ y: -8, scale: 1.01, transition: { duration: 0.3 } }}
           >
             <div className="card-glass-panel">
               <div className="card-header">
@@ -87,6 +98,7 @@ const FormationsList = () => {
               </div>
 
               <div className="card-body">
+                {/* Horarios */}
                 <div className="info-block">
                   <div className="info-header">
                     <Clock size={16} /> <span>Horarios Disponibles</span>
@@ -98,6 +110,7 @@ const FormationsList = () => {
                   </ul>
                 </div>
 
+                {/* Duración */}
                 <div className="info-block">
                   <div className="info-header">
                     <Calendar size={16} /> <span>Duración del Programa</span>
@@ -105,6 +118,23 @@ const FormationsList = () => {
                   <p className="highlight-text">{formation.duration}</p>
                 </div>
 
+                {/* Modalidades — solo si aplica */}
+                {formation.modalidades && (
+                  <div className="info-block">
+                    <div className="info-header">
+                      <Monitor size={16} /> <span>Modalidades</span>
+                    </div>
+                    <ul className="pill-list">
+                      {formation.modalidades.map((mod, i) => (
+                        <li key={i} className={`pill pill-mode pill-mode-${i === 0 ? 'presencial' : 'virtual'}`}>
+                          {mod}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Cursos */}
                 <div className="info-block">
                   <div className="info-header">
                     <BookOpen size={16} /> <span>Cursos Incluidos</span>
@@ -116,11 +146,11 @@ const FormationsList = () => {
                   </ul>
                 </div>
               </div>
-              
+
               <div className="card-footer">
                 <button className="inscribe-btn">Me interesa</button>
               </div>
-              
+
               {/* Background Glow */}
               <div className="card-glow"></div>
             </div>

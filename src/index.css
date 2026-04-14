@@ -115,10 +115,11 @@ section {
   font-size: 1.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
-  background: linear-gradient(to right, #ffffff, var(--color-accent-gold));
+  background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 45%, #818cf8 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 12px rgba(56,189,248,0.25));
 }
 
 /* ====================
@@ -452,27 +453,119 @@ button {
   box-shadow: 0 8px 20px rgba(226, 192, 112, 0.2);
 }
 
-/* ====================
-   Responsive
-==================== */
-@media (max-width: 768px) {
+/* ════════════════════════════════════════════════════
+   RESPONSIVE — tablets & phones
+════════════════════════════════════════════════════ */
+
+/* ── Tablet (≤ 900px) ────────────────────────────── */
+@media (max-width: 900px) {
   .hero-section {
     flex-direction: column;
     text-align: center;
-    padding-top: 3rem;
+    gap: 2.5rem;
+    min-height: auto;
+    padding-top: 2rem;
   }
-  
-  .hero-buttons {
-    justify-content: center;
-    flex-wrap: wrap;
+
+  .hero-content { flex: none; width: 100%; }
+
+  .hero-title { font-size: clamp(2.2rem, 7vw, 3.5rem); }
+
+  .hero-description {
+    font-size: 1.2rem;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  
-  .main-navbar {
-    flex-direction: column-reverse;
-    gap: 1rem;
-    padding: 1rem;
+
+  .hero-buttons { justify-content: center; flex-wrap: wrap; }
+
+  .hero-mascot-placeholder {
+    width: 100%;
+    max-width: 380px !important;
+    margin: 0 auto;
   }
+
+  /* Visión / Misión grid */
+  .jornada-options-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem;
+  }
+
+  /* Campus features */
+  .campus-features-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  section { padding: 3rem 1.5rem; }
 }
+
+/* ── Mobile (≤ 640px) ────────────────────────────── */
+@media (max-width: 640px) {
+  /* Navbar */
+  .main-navbar {
+    padding: 1rem 1.25rem;
+  }
+  .nav-brand { font-size: 1.35rem; letter-spacing: 0.06em; }
+
+  /* Back button */
+  .back-btn-container { padding: 1.25rem 1.25rem 0; }
+  .btn-back { font-size: 0.95rem; padding: 0.45rem 1rem; }
+
+  /* Hero */
+  .hero-section { gap: 1.5rem; padding-top: 1.5rem; }
+  .hero-title { font-size: clamp(1.9rem, 8vw, 2.8rem); margin-bottom: 1rem; }
+  .hero-description { font-size: 1.05rem; margin-bottom: 1.5rem; }
+
+  .hero-mascot-placeholder {
+    max-width: 280px !important;
+  }
+
+  /* Mascot bubble */
+  .mascot-bubble > div {
+    font-size: 0.75rem !important;
+    padding: 0.4rem 0.75rem !important;
+  }
+
+  /* Sections */
+  section { padding: 2.5rem 1rem; }
+
+  /* Section titles */
+  .section-title { font-size: 1.8rem; }
+  .section-description { font-size: 1.05rem; }
+
+  /* Vision/Mission cards */
+  .jornada-options-grid { grid-template-columns: 1fr !important; gap: 1.25rem; }
+  .vm-card-inner {
+    padding: 1.75rem 1.75rem 1.75rem 2.25rem;
+  }
+  .vm-card-inner h3 { font-size: 1.3rem; }
+  .vm-card-inner p  { font-size: 0.95rem; }
+
+  /* Campus feature cards */
+  .campus-features-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .campus-feat-card { padding: 1.5rem; }
+  .feat-title { font-size: 1rem; }
+  .feat-desc  { font-size: 0.9rem; }
+
+  /* CTA plain */
+  .cta-plain-title { font-size: 1.5rem; }
+  .cta-plain-desc  { font-size: 0.95rem; }
+
+  /* Primary button */
+  .btn-primary { font-size: 0.95rem; padding: 0.65rem 1.25rem; }
+}
+
+/* ── Extra small (≤ 420px) ───────────────────────── */
+@media (max-width: 420px) {
+  .hero-mascot-placeholder { max-width: 230px !important; }
+  .nav-brand { font-size: 1.15rem; }
+  .section-title { font-size: 1.55rem; }
+}
+
 
 /* ====================
    3D Mascot Interactive Bubble

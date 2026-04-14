@@ -29,10 +29,10 @@
 }
 
 .formations-subtitle {
-  font-size: 1.05rem;
+  font-size: 1.35rem;
   color: var(--color-text-secondary);
   margin-bottom: 1.25rem;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .formations-grid {
@@ -77,14 +77,36 @@
 
 .theme-blue {
   --glow-color: #3b82f6;
+  box-shadow:
+    0 4px 30px rgba(0, 0, 0, 0.35),
+    0 0 35px rgba(59, 130, 246, 0.14),
+    0 0 70px rgba(59, 130, 246, 0.06);
 }
 
 .theme-purple {
   --glow-color: #a855f7;
+  box-shadow:
+    0 4px 30px rgba(0, 0, 0, 0.35),
+    0 0 35px rgba(168, 85, 247, 0.14),
+    0 0 70px rgba(168, 85, 247, 0.06);
 }
 
 .formation-card:hover {
   transform: translateY(-8px);
+}
+
+.theme-blue:hover {
+  box-shadow:
+    0 24px 55px rgba(0, 0, 0, 0.55),
+    0  0 55px rgba(59, 130, 246, 0.30),
+    0  0 90px rgba(59, 130, 246, 0.12);
+}
+
+.theme-purple:hover {
+  box-shadow:
+    0 24px 55px rgba(0, 0, 0, 0.55),
+    0  0 55px rgba(168, 85, 247, 0.30),
+    0  0 90px rgba(168, 85, 247, 0.12);
 }
 
 .card-glass-panel {
@@ -180,6 +202,19 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #f1f5f9;
+}
+
+/* Modalidades pills — Presencial (green) / Virtual (blue) */
+.pill-mode-presencial {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+}
+
+.pill-mode-virtual {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.35);
+  color: #a5b4fc;
 }
 
 .highlight-text {
@@ -289,13 +324,22 @@
 }
 
 @media (max-width: 640px) {
-  .section-title {
-    font-size: 2rem;
-  }
-  .formations-grid {
-    gap: 2rem;
-  }
-  .card-glass-panel {
-    padding: 1.75rem;
-  }
+  .section-title { font-size: 2rem; }
+  .formations-subtitle { font-size: 1.1rem; }
+  .formations-grid { gap: 2rem; }
+  .card-glass-panel { padding: 1.75rem; }
+  .card-header h3 { font-size: 1.6rem; }
+  .pill { font-size: 0.95rem; padding: 0.4rem 0.85rem; }
+  .pill-mode-presencial, .pill-mode-virtual { font-size: 0.88rem; }
+  .highlight-text { font-size: 1.3rem; }
+  .bullet-list li { font-size: 1.05rem; }
+  .inscribe-btn { font-size: 1.1rem; }
+}
+
+@media (max-width: 420px) {
+  .formations-section { padding: 2rem 1rem; }
+  .card-glass-panel { padding: 1.4rem; }
+  .card-header h3 { font-size: 1.35rem; }
+  .section-title { font-size: 1.7rem; }
+  .formations-subtitle { font-size: 0.95rem; }
 }

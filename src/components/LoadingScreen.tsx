@@ -188,6 +188,13 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isVisible }) => {
                 transition={{ repeat: Infinity, duration: 14, ease: 'linear' }}
               />
 
+              {/* Far ring — most distant, very slow, same direction as inner */}
+              <motion.div
+                className="loading-far-ring"
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 22, ease: 'linear' }}
+              />
+
               {/* Logo image with gentle float */}
               <motion.img
                 src={logoImage}
