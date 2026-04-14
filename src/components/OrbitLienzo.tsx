@@ -220,9 +220,9 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
       if (e.current.objetoPrincipal && referenciaBurbuja.current) {
         e.current.objetoPrincipal.getWorldPosition(_v3)
 
-        // Adjust so bubble floats above the 3D head within the bounds
-        _v3.y += 1.6 
-        _v3.x += 0 
+        // Bubble sits at the very bottom-edge of the 3D head
+        _v3.y -= 1.55  // negative = move down in world space
+        _v3.x += 0
 
         _v3.project(camara)
         
@@ -231,8 +231,8 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
         const x = (_v3.x * 0.5 + 0.5) * rect.width
         const y = (-_v3.y * 0.5 + 0.5) * rect.height
 
-        // Make it relative to the container for standard absolutely positioned child
-        referenciaBurbuja.current.style.transform = `translate(${x}px, ${y}px) translate(-50%, -100%)`
+        // translate(-50%, 0%) so the bubble top edge sits right at the projected point
+        referenciaBurbuja.current.style.transform = `translate(${x}px, ${y}px) translate(-50%, -10%)`
       }
 
       renderizador.render(escena, camara)
@@ -260,7 +260,8 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
       })
       escena.clear()
     }
-  }, [alCargar, referenciaBurbuja])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const alHacerClick = () => {
     window.open('https://wa.me/573000000000', '_blank')

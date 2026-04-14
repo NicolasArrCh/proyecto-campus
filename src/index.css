@@ -227,6 +227,14 @@ button {
   align-items: center;
 }
 
+/* ====================
+   Visión & Misión Section
+==================== */
+.vision-mision-section {
+  position: relative;
+}
+
+
 .mascot-box {
   width: 100%;
   max-width: 400px;
