@@ -33,8 +33,9 @@ body {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 1s ease-out, transform 1s ease-out;
-  /* Prevent pointer events before it's visible, but ensure they work after */
-  pointer-events: none; 
+  pointer-events: none;
+  /* Offset for fixed navbar (approx 88px at desktop) */
+  padding-top: 88px;
 }
 
 .app-content.visible {
@@ -103,12 +104,16 @@ section {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 3rem;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   background: var(--color-glass-bg);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-glass-border);
+  /* transform handled by Framer Motion */
+  will-change: transform;
 }
 
 .nav-brand {

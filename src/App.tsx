@@ -7,17 +7,76 @@ import { OrbitLienzo } from './components/OrbitLienzo';
 import SkillsTabs from './components/SkillsTabs';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState('inicio');
-  const [history, setHistory] = useState(['inicio']);
+  const [isLoading, setIsLoading]       = useState(true);
+  const [currentPage, setCurrentPage]   = useState('inicio');
+  const [history, setHistory]           = useState(['inicio']);
   const [isMascotLoaded, setIsMascotLoaded] = useState(false);
-  const bubbleRef = useRef<HTMLDivElement>(null);
+  const [navVisible, setNavVisible]     = useState(true);
 
+  const bubbleRef        = useRef<HTMLDivElement>(null);
+  const lastScrollRef    = useRef(0);
+  const scrollUpAccumRef = useRef(0);
+  const hideTimerRef     = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /* ── Loading timer ──────────────────────────────────────────── */
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
+  /* ── Navbar scroll behaviour ────────────────────────────────────
+     • scrollY ≤ 10        → always shown, cancel any pending timer
+     • Scrolling down      → hide immediately
+     • Scrolling up ≥ 80px → show; start 2s auto-hide timer
+     • Scrolling up < 80px → accumulate, wait
+  ─────────────────────────────────────────────────────────────── */
+  useEffect(() => {
+    const TOP_THRESHOLD = 10;
+    const SHOW_DELTA    = 80;
+    const AUTO_HIDE_MS  = 2000;
+
+    const onScroll = () => {
+      const y     = window.scrollY;
+      const delta = lastScrollRef.current - y; // + = scrolling up, − = down
+
+      if (y <= TOP_THRESHOLD) {
+        // At the very top — always visible
+        scrollUpAccumRef.current = 0;
+        if (hideTimerRef.current) { clearTimeout(hideTimerRef.current); hideTimerRef.current = null; }
+        setNavVisible(true);
+
+      } else if (delta < 0) {
+        // Scrolling down — hide immediately
+        scrollUpAccumRef.current = 0;
+        if (hideTimerRef.current) { clearTimeout(hideTimerRef.current); hideTimerRef.current = null; }
+        setNavVisible(false);
+
+      } else if (delta > 0) {
+        // Scrolling up — accumulate until threshold reached
+        scrollUpAccumRef.current += delta;
+        if (scrollUpAccumRef.current >= SHOW_DELTA) {
+          scrollUpAccumRef.current = 0;
+          setNavVisible(true);
+          // Start 2s auto-hide (only if not at top)
+          if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+          hideTimerRef.current = setTimeout(() => {
+            if (window.scrollY > TOP_THRESHOLD) setNavVisible(false);
+            hideTimerRef.current = null;
+          }, AUTO_HIDE_MS);
+        }
+      }
+
+      lastScrollRef.current = y;
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    };
+  }, []);
+
+  /* ── Navigation ─────────────────────────────────────────────── */
   const navigateTo = (page: string) => {
     setHistory(prev => [...prev, page]);
     setCurrentPage(page);
@@ -57,9 +116,14 @@ function App() {
       <main className={`app-content ${!isLoading ? 'visible' : ''}`}>
         <InteractiveBackground />
 
-        <header className="main-navbar">
+        {/* ── Navbar — hide/show on scroll via Framer Motion ── */}
+        <motion.header
+          className="main-navbar"
+          animate={{ y: navVisible ? 0 : '-100%' }}
+          transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
+        >
           <div className="nav-brand">CAMPUSLANDS</div>
-        </header>
+        </motion.header>
 
         {/* ══════════════════════════════════════════════════
             INICIO — display:none/block (nunca unmounts)
@@ -77,11 +141,11 @@ function App() {
               <p className="hero-description">
                 Bienvenido a nuestro campus, el ecosistema de formación tecnológica líder diseñado para
                 potenciar tus habilidades y conectarte con el futuro en la industria del desarrollo de
-                software. Descubre una metodología inmersiva y 100% práctica simulando entornos empresariales reales.
+                software. Descubre una metodología inmersiva y 100% práctica simulando entornos empresariales.
               </p>
             </div>
 
-            {/* Mascota — siempre en DOM dentro de display:none, sin mascot-box 2D */}
+            {/* Mascota */}
             <div
               className="hero-mascot-placeholder relative z-10"
               style={{ position: 'relative', width: '100%', maxWidth: '500px', aspectRatio: '1/1' }}
@@ -114,7 +178,7 @@ function App() {
             </div>
           </section>
 
-          {/* Visión & Misión — con borde rotante premium */}
+          {/* Visión & Misión */}
           <motion.section
             className="vision-mision-section overflow-hidden"
             initial="hidden"
@@ -132,7 +196,6 @@ function App() {
                 Brindándote inmersión total en las tecnologías de punta de la industria.
               </p>
 
-              {/* Cards con borde luminoso rotante */}
               <div className="jornada-options-grid" style={{ marginBottom: '2.5rem' }}>
 
                 <div className="vm-card-wrapper wrapper-vision">
@@ -179,7 +242,7 @@ function App() {
 
               <div className="relative z-10">
 
-                {/* CTA — sin caja */}
+                {/* CTA */}
                 <div className="cta-plain">
                   <h2 className="cta-plain-title">¿Listo para dar el siguiente paso?</h2>
                   <p className="cta-plain-desc">
@@ -196,7 +259,7 @@ function App() {
                 {/* Skills tabs */}
                 <SkillsTabs />
 
-                {/* Campus features — al fondo */}
+                {/* Campus features */}
                 <div style={{ marginTop: '3rem' }}>
                   <h2 className="section-title" style={{ marginBottom: '1.5rem' }}>Nuestro Campus</h2>
                   <div className="campus-features-grid">
