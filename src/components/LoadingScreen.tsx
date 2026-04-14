@@ -174,11 +174,18 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isVisible }) => {
                 transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
               />
 
-              {/* Rotating dashed ring (subtle, single) */}
+              {/* Inner dashed ring */}
               <motion.div
                 className="loading-dashed-ring"
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 6, ease: 'linear' }}
+              />
+
+              {/* Outer larger ring — counter-rotation, slower */}
+              <motion.div
+                className="loading-outer-ring"
+                animate={{ rotate: -360 }}
+                transition={{ repeat: Infinity, duration: 14, ease: 'linear' }}
               />
 
               {/* Logo image with gentle float */}

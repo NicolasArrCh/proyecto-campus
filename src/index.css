@@ -636,114 +636,131 @@ button {
   color: var(--color-text-secondary);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Visión & Misión — Rotating gradient border (premium effect)
-   Technique: oversized ::after inside overflow:hidden wrapper
-   Works in ALL browsers — no CSS @property needed.
-═══════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════
+   Visión & Misión — Diseño corporativo elegante
+   Sin animaciones giratorias → clean, professional
+════════════════════════════════════════════════ */
 .vm-card-wrapper {
   position: relative;
-  border-radius: 18px;
-  overflow: hidden;          /* clips the rotating ::after */
-  padding: 2px;              /* the "border" thickness */
-  /* Subtle always-on outer glow */
-  transition: box-shadow 0.5s ease;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
 }
 
-/* Rotating element — fills wrapper × 3 so all corners are covered when rotating */
-.vm-card-wrapper::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 300%;
-  height: 300%;
-  transform-origin: 0 0;
-  animation: vm-spin 5s linear infinite;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Gold beam — Visión */
-.wrapper-vision::after {
-  background: conic-gradient(
-    from 0deg,
-    transparent      0%,
-    transparent      72%,
-    rgba(226,192,112,0.35) 78%,
-    rgba(245,158, 11,0.90) 82%,
-    rgba(253,230,138,1.00) 86%,
-    rgba(245,158, 11,0.90) 90%,
-    rgba(226,192,112,0.35) 94%,
-    transparent      98%,
-    transparent     100%
-  );
-}
-
-/* Cyan-blue beam — Misión */
-.wrapper-mision::after {
-  background: conic-gradient(
-    from 0deg,
-    transparent      0%,
-    transparent      72%,
-    rgba( 59,130,246,0.35) 78%,
-    rgba(  6,182,212,0.90) 82%,
-    rgba(165,243,252,1.00) 86%,
-    rgba(  6,182,212,0.90) 90%,
-    rgba( 59,130,246,0.35) 94%,
-    transparent      98%,
-    transparent     100%
-  );
-}
-
-@keyframes vm-spin {
-  from { transform: translate(-50%, -50%) rotate(0deg);   }
-  to   { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* Inner card — sits above rotating beam */
+/* ── Shared: glass background + subtle border ────── */
 .vm-card-inner {
   position: relative;
-  z-index: 1;
-  background: linear-gradient(145deg, rgba(19,27,47,0.97), rgba(10,15,28,0.99));
-  border-radius: 16px;   /* 18 - 2 = 16 */
-  padding: 2.5rem;
+  background: rgba(11, 16, 30, 0.88);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 2.5rem 2.5rem 2.5rem 3rem; /* extra left padding for the bar */
   height: 100%;
   box-sizing: border-box;
-  transition: box-shadow 0.5s ease;
+  overflow: hidden;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* Hover: amplify the glow */
+/* ── Left accent bar ─────────────────────────────── */
+.vm-card-inner::before {
+  content: '';
+  position: absolute;
+  top: 12%;
+  left: 0;
+  width: 3px;
+  height: 76%;
+  border-radius: 0 3px 3px 0;
+  transition: height 0.4s ease, opacity 0.4s ease;
+}
+
+/* ── Subtle corner radial blob ───────────────────── */
+.vm-card-inner::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(55px);
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.4s ease;
+}
+
+/* ══ Visión — Gold theme ══════════════════════════ */
+.wrapper-vision .vm-card-inner::before {
+  background: linear-gradient(to bottom, transparent, #e2c070, #f59e0b, #e2c070, transparent);
+}
+.wrapper-vision .vm-card-inner::after {
+  background: radial-gradient(circle, rgba(245,158,11,0.4) 0%, transparent 70%);
+}
+.wrapper-vision .vm-card-inner {
+  border-top: 1px solid rgba(226, 192, 112, 0.20);
+  border-left: 1px solid rgba(226, 192, 112, 0.10);
+}
+
+/* hover */
 .wrapper-vision:hover {
-  box-shadow: 0 0 40px rgba(245, 158, 11, 0.25), 0 0 80px rgba(245, 158, 11, 0.08);
+  transform: translateY(-8px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.5),
+    0  8px 24px rgba(245, 158, 11, 0.14),
+    0  0  60px rgba(245, 158, 11, 0.06);
 }
 .wrapper-vision:hover .vm-card-inner {
-  box-shadow: inset 0 0 30px rgba(245, 158, 11, 0.07);
+  border-color: rgba(226, 192, 112, 0.35);
+}
+.wrapper-vision:hover .vm-card-inner::before { height: 90%; }
+.wrapper-vision:hover .vm-card-inner::after  { opacity: 0.80; }
+
+/* ══ Misión — Cyan-blue theme ════════════════════ */
+.wrapper-mision .vm-card-inner::before {
+  background: linear-gradient(to bottom, transparent, #3b82f6, #06b6d4, #3b82f6, transparent);
+}
+.wrapper-mision .vm-card-inner::after {
+  background: radial-gradient(circle, rgba(6,182,212,0.4) 0%, transparent 70%);
+}
+.wrapper-mision .vm-card-inner {
+  border-top: 1px solid rgba(6, 182, 212, 0.18);
+  border-left: 1px solid rgba(6, 182, 212, 0.08);
 }
 
+/* hover */
 .wrapper-mision:hover {
-  box-shadow: 0 0 40px rgba(6, 182, 212, 0.25), 0 0 80px rgba(6, 182, 212, 0.08);
+  transform: translateY(-8px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.5),
+    0  8px 24px rgba(6, 182, 212, 0.14),
+    0  0  60px rgba(6, 182, 212, 0.06);
 }
 .wrapper-mision:hover .vm-card-inner {
-  box-shadow: inset 0 0 30px rgba(6, 182, 212, 0.07);
+  border-color: rgba(6, 182, 212, 0.35);
 }
+.wrapper-mision:hover .vm-card-inner::before { height: 90%; }
+.wrapper-mision:hover .vm-card-inner::after  { opacity: 0.80; }
 
-/* Text styling inside vm cards */
+/* ── Typography inside vm cards ──────────────────── */
 .vm-card-inner h3 {
-  color: var(--color-accent-gold);
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
+  letter-spacing: 0.01em;
+  color: var(--color-accent-gold);
 }
-.wrapper-mision .vm-card-inner h3 { color: #7dd3fc; }
+.wrapper-mision .vm-card-inner h3 {
+  color: #7dd3fc;
+}
 
 .vm-card-inner p {
   color: var(--color-text-secondary);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: 1.75;
 }
 
 .vm-card-inner .jornada-icon {
-  font-size: 2.2rem;
-  margin-bottom: 0.8rem;
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  display: block;
 }
+
