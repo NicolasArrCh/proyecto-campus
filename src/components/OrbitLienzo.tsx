@@ -9,86 +9,94 @@ interface PropiedadesLienzo {
 
 export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaBurbuja }) => {
   const referenciaContenedor = useRef<HTMLDivElement>(null)
-
-  // Referencias internas de THREE
-  const e = useRef({
-    escena: new THREE.Scene(),
-    camara: new THREE.PerspectiveCamera(35, 1, 0.1, 100),
-    renderizador: new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' }),
-    objetoPrincipal: null as THREE.Group | null,
-    satelites: null as THREE.Points | null,
-    luzMouse: null as THREE.PointLight | null,
-    mouseNDC: new THREE.Vector2(0, 0),
-    mouseGlobal: new THREE.Vector3(0, 0, 0),
-    reloj: new THREE.Clock(),
-    idRaf: 0,
-    raycaster: new THREE.Raycaster(),
-    plano: new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),
-    interaccionActiva: false,
-    uniformesMat: {
-      uTime: { value: 0 },
-      uMouse: { value: new THREE.Vector3(99, 99, 99) }
-    }
-  })
-
-  const _v3 = new THREE.Vector3()
+  // Ref para el callback — evita stale closure sin incluir en deps
+  const alCargarRef = useRef(alCargar)
+  alCargarRef.current = alCargar
 
   useEffect(() => {
     if (!referenciaContenedor.current) return
     const contenedorDOM = referenciaContenedor.current
-    const { escena, camara, renderizador } = e.current
 
+    // ─── Crear instancias Three.js DENTRO del effect ───────────────────────────
+    // (Esto corrige el doble-canvas en React.StrictMode que monta efectos 2 veces)
+    const escena = new THREE.Scene()
+    const camara = new THREE.PerspectiveCamera(35, 1, 0.1, 100)
+    const renderizador = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance',
+    })
+
+    // Estado mutable local al effect
+    const st = {
+      objetoPrincipal: null as THREE.Group | null,
+      satelites: null as THREE.Points | null,
+      luzMouse: null as THREE.PointLight | null,
+      mouseNDC: new THREE.Vector2(0, 0),
+      mouseGlobal: new THREE.Vector3(0, 0, 0),
+      reloj: new THREE.Clock(),
+      idRaf: 0,
+      raycaster: new THREE.Raycaster(),
+      plano: new THREE.Plane(new THREE.Vector3(0, 0, 1), 0),
+      uniformesMat: {
+        uTime: { value: 0 },
+        uMouse: { value: new THREE.Vector3(99, 99, 99) },
+      },
+    }
+
+    const _v3 = new THREE.Vector3()
+
+    // ─── Renderer ─────────────────────────────────────────────────────────────
     renderizador.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderizador.toneMapping = THREE.ACESFilmicToneMapping
+    renderizador.toneMappingExposure = 1.8
     contenedorDOM.appendChild(renderizador.domElement)
     camara.position.z = 10
 
-    // Configuración de Iluminación
-    escena.add(new THREE.AmbientLight(0xffffff, 0.4))
-    const luzDir = new THREE.DirectionalLight(0xffffff, 1.2)
+    // ─── Iluminación (alta luminosidad) ───────────────────────────────────────
+    escena.add(new THREE.AmbientLight(0xffffff, 1.4))
+    const luzDir = new THREE.DirectionalLight(0xffffff, 2.8)
     luzDir.position.set(5, 5, 8)
     escena.add(luzDir)
+    const luzDir2 = new THREE.DirectionalLight(0xaaddff, 1.2)
+    luzDir2.position.set(-4, -2, 6)
+    escena.add(luzDir2)
 
-    const luzPunto = new THREE.PointLight(0x00e5ff, 20, 10, 2)
+    const luzPunto = new THREE.PointLight(0x00e5ff, 45, 12, 2)
     escena.add(luzPunto)
-    e.current.luzMouse = luzPunto
+    st.luzMouse = luzPunto
 
-    const luzContorno = new THREE.SpotLight(0x7c4dff, 50)
+    const luzContorno = new THREE.SpotLight(0x7c4dff, 80)
     luzContorno.position.set(-5, 5, -5)
     escena.add(luzContorno)
 
-    escena.fog = new THREE.FogExp2(0x000000, 0.08)
-
-    // Carga del Modelo 3D
+    // ─── Carga del modelo GLTF ────────────────────────────────────────────────
     new GLTFLoader().load('/models/orbit-head.glb', (gltf) => {
-      const caja = new THREE.Box3().setFromObject(gltf.scene)
+      const caja   = new THREE.Box3().setFromObject(gltf.scene)
       const centro = caja.getCenter(new THREE.Vector3())
       const tamano = caja.getSize(new THREE.Vector3())
       const dimMax = Math.max(tamano.x, tamano.y, tamano.z)
 
       gltf.scene.position.sub(centro)
-      gltf.scene.scale.set(1.0 / dimMax, 1.0 / dimMax, 1.0 / dimMax)
+      gltf.scene.scale.set(1 / dimMax, 1 / dimMax, 1 / dimMax)
 
       const contenedor = new THREE.Group()
       contenedor.add(gltf.scene)
-
-      // Escala responsiva ajustada al contenedor 
-      const escalaFinal = 5.5
-      contenedor.scale.set(escalaFinal, escalaFinal, escalaFinal)
+      contenedor.scale.set(5.5, 5.5, 5.5)
       contenedor.rotation.y = -Math.PI / 2
-
       escena.add(contenedor)
-      e.current.objetoPrincipal = contenedor
+      st.objetoPrincipal = contenedor
 
-      // Inyección de Shaders
+      // Inyección de shaders
       gltf.scene.traverse((hijo) => {
         if ((hijo as THREE.Mesh).isMesh) {
           const malla = hijo as THREE.Mesh
           if (malla.material) {
-            const materiales = Array.isArray(malla.material) ? malla.material : [malla.material]
-            materiales.forEach((mat) => {
+            const mats = Array.isArray(malla.material) ? malla.material : [malla.material]
+            mats.forEach((mat) => {
               mat.onBeforeCompile = (shader) => {
-                shader.uniforms.uTime = e.current.uniformesMat.uTime
-                shader.uniforms.uMouse = e.current.uniformesMat.uMouse
+                shader.uniforms.uTime  = st.uniformesMat.uTime
+                shader.uniforms.uMouse = st.uniformesMat.uMouse
                 shader.vertexShader = `
                   uniform float uTime;
                   uniform vec3 uMouse;
@@ -118,30 +126,34 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
         }
       })
 
-      if (alCargar) alCargar()
+      if (alCargarRef.current) alCargarRef.current()
     })
-    
+
+    // ─── Satélites / partículas ───────────────────────────────────────────────
     const cantSat = 400
     const arrPosSat = new Float32Array(cantSat * 3)
     for (let i = 0; i < cantSat; i++) {
-      const radio = 4.0 + Math.random() * 3.0
+      const radio = 4 + Math.random() * 3
       const theta = Math.random() * Math.PI * 2
-      const phi = Math.acos(2 * Math.random() - 1)
-      arrPosSat[i * 3] = radio * Math.sin(phi) * Math.cos(theta)
+      const phi   = Math.acos(2 * Math.random() - 1)
+      arrPosSat[i * 3]     = radio * Math.sin(phi) * Math.cos(theta)
       arrPosSat[i * 3 + 1] = radio * Math.sin(phi) * Math.sin(theta)
       arrPosSat[i * 3 + 2] = radio * Math.cos(phi)
     }
     const geoSat = new THREE.BufferGeometry()
     geoSat.setAttribute('position', new THREE.BufferAttribute(arrPosSat, 3))
-    const satelites = new THREE.Points(geoSat, new THREE.PointsMaterial({ color: 0x66ccff, size: 0.03, transparent: true, opacity: 0.6 }))
+    const satelites = new THREE.Points(
+      geoSat,
+      new THREE.PointsMaterial({ color: 0x66ccff, size: 0.03, transparent: true, opacity: 0.6 })
+    )
     escena.add(satelites)
-    e.current.satelites = satelites
+    st.satelites = satelites
 
-    // Redimensionar usando ResizeObserver para ajustarse al placeholder
+    // ─── ResizeObserver ───────────────────────────────────────────────────────
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect
-        if(width === 0 || height === 0) continue
+        if (width === 0 || height === 0) continue
         camara.aspect = width / height
         camara.updateProjectionMatrix()
         renderizador.setSize(width, height)
@@ -149,107 +161,84 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
     })
     resizeObserver.observe(contenedorDOM)
 
-    // Eventos interactivos locales al bounding box
+    // ─── Eventos de mouse / touch ─────────────────────────────────────────────
     const actualizarMouseNDC = (clientX: number, clientY: number) => {
       const rect = contenedorDOM.getBoundingClientRect()
-      const x = clientX - rect.left
-      const y = clientY - rect.top
-      e.current.mouseNDC.x = (x / rect.width) * 2 - 1
-      e.current.mouseNDC.y = -(y / rect.height) * 2 + 1
+      if (rect.width === 0 || rect.height === 0) return
+      st.mouseNDC.x =  ((clientX - rect.left) / rect.width)  * 2 - 1
+      st.mouseNDC.y = -((clientY - rect.top)  / rect.height) * 2 + 1
     }
-
-    const alMoverMouse = (evento: MouseEvent) => {
-      actualizarMouseNDC(evento.clientX, evento.clientY)
+    const onMouseMove = (ev: MouseEvent) => actualizarMouseNDC(ev.clientX, ev.clientY)
+    const onTouch     = (ev: TouchEvent) => {
+      if (ev.touches.length > 0) actualizarMouseNDC(ev.touches[0].clientX, ev.touches[0].clientY)
     }
+    const onTouchEnd  = () => st.mouseNDC.set(0, 0)
 
-    const alTocar = (evento: TouchEvent) => {
-      e.current.interaccionActiva = true
-      if (evento.touches.length > 0) {
-        actualizarMouseNDC(evento.touches[0].clientX, evento.touches[0].clientY)
-      }
-    }
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('touchstart', onTouch)
+    window.addEventListener('touchmove', onTouch)
+    window.addEventListener('touchend', onTouchEnd)
 
-    const alSoltarToque = () => {
-      e.current.interaccionActiva = false
-      e.current.mouseNDC.set(0, 0)
-    }
-
-    // Agregar eventos al DOCUMENT global para que atrape movimientos aunque salgan un poco del borde,
-    // pero calculando en base al bouding box. O agregar al contenedor. Agregaremos al window pero limitaremos si no interactúa? 
-    // Lo más seguro es window, pasándola a local:
-    window.addEventListener('mousemove', alMoverMouse)
-    window.addEventListener('touchstart', alTocar)
-    window.addEventListener('touchmove', alTocar)
-    window.addEventListener('touchend', alSoltarToque)
-
+    // ─── Loop de animación ────────────────────────────────────────────────────
     const animar = () => {
-      e.current.idRaf = requestAnimationFrame(animar)
-      const t = e.current.reloj.getElapsedTime()
-      e.current.uniformesMat.uTime.value = t
+      st.idRaf = requestAnimationFrame(animar)
+      const t = st.reloj.getElapsedTime()
+      st.uniformesMat.uTime.value = t
 
-      const interactuando = e.current.interaccionActiva || true // podemos mantenerlo activo si es desktop interact
-
-      e.current.raycaster.setFromCamera(e.current.mouseNDC, camara)
-      if (e.current.raycaster.ray.intersectPlane(e.current.plano, _v3)) {
-        e.current.mouseGlobal.lerp(_v3, 0.1)
-        
-        e.current.uniformesMat.uMouse.value.copy(e.current.mouseGlobal)
-        
-        if (e.current.luzMouse) {
-          e.current.luzMouse.position.copy(e.current.mouseGlobal)
-          e.current.luzMouse.position.z = 2
-          e.current.luzMouse.intensity = (15 + Math.sin(t * 10) * 5)
+      st.raycaster.setFromCamera(st.mouseNDC, camara)
+      if (st.raycaster.ray.intersectPlane(st.plano, _v3)) {
+        st.mouseGlobal.lerp(_v3, 0.1)
+        st.uniformesMat.uMouse.value.copy(st.mouseGlobal)
+        if (st.luzMouse) {
+          st.luzMouse.position.copy(st.mouseGlobal)
+          st.luzMouse.position.z = 2
+          st.luzMouse.intensity  = 15 + Math.sin(t * 10) * 5
         }
       }
 
-      const rotY = e.current.mouseNDC.x * 0.3 + Math.sin(t * 0.5) * 0.05
-      const rotX = -e.current.mouseNDC.y * 0.2 + Math.cos(t * 0.8) * 0.02
+      const rotY = st.mouseNDC.x * 0.3 + Math.sin(t * 0.5) * 0.05
+      const rotX = -st.mouseNDC.y * 0.2 + Math.cos(t * 0.8) * 0.02
 
-      if (e.current.objetoPrincipal) {
-        e.current.objetoPrincipal.rotation.y += (-Math.PI / 2 + rotY - e.current.objetoPrincipal.rotation.y) * 0.05
-        e.current.objetoPrincipal.rotation.x += (rotX - e.current.objetoPrincipal.rotation.x) * 0.05
-
-        const offsetFlotacion = Math.sin(t * 1.5) * 0.1
-        e.current.objetoPrincipal.position.y = offsetFlotacion
+      if (st.objetoPrincipal) {
+        st.objetoPrincipal.rotation.y += (-Math.PI / 2 + rotY - st.objetoPrincipal.rotation.y) * 0.05
+        st.objetoPrincipal.rotation.x += (rotX - st.objetoPrincipal.rotation.x) * 0.05
+        st.objetoPrincipal.position.y  = Math.sin(t * 1.5) * 0.1
       }
-      if (e.current.satelites) {
-        e.current.satelites.rotation.y += (rotY * 0.8 - e.current.satelites.rotation.y) * 0.02
-        e.current.satelites.rotation.x += (rotX * 0.8 - e.current.satelites.rotation.x) * 0.02
+      if (st.satelites) {
+        st.satelites.rotation.y += (rotY * 0.8 - st.satelites.rotation.y) * 0.02
+        st.satelites.rotation.x += (rotX * 0.8 - st.satelites.rotation.x) * 0.02
       }
 
-      if (e.current.objetoPrincipal && referenciaBurbuja.current) {
-        e.current.objetoPrincipal.getWorldPosition(_v3)
-
-        // Bubble sits at the very bottom-edge of the 3D head
-        _v3.y -= 1.55  // negative = move down in world space
-        _v3.x += 0
-
+      // Posición de la burbuja
+      if (st.objetoPrincipal && referenciaBurbuja.current) {
+        st.objetoPrincipal.getWorldPosition(_v3)
+        _v3.y -= 2.8
         _v3.project(camara)
-        
         const rect = contenedorDOM.getBoundingClientRect()
-
-        const x = (_v3.x * 0.5 + 0.5) * rect.width
-        const y = (-_v3.y * 0.5 + 0.5) * rect.height
-
-        // translate(-50%, 0%) so the bubble top edge sits right at the projected point
-        referenciaBurbuja.current.style.transform = `translate(${x}px, ${y}px) translate(-50%, -10%)`
+        if (rect.width > 0 && rect.height > 0) {
+          const x = (_v3.x * 0.5 + 0.5) * rect.width
+          const y = (-_v3.y * 0.5 + 0.5) * rect.height
+          referenciaBurbuja.current.style.transform = `translate(${x}px, ${y}px) translate(-50%, 0%)`
+        }
       }
 
       renderizador.render(escena, camara)
     }
-
     animar()
 
+    // ─── Cleanup (también corre en StrictMode al desmontar el 1er mount) ──────
     return () => {
       resizeObserver.disconnect()
-      window.removeEventListener('mousemove', alMoverMouse)
-      window.removeEventListener('touchstart', alTocar)
-      window.removeEventListener('touchmove', alTocar)
-      window.removeEventListener('touchend', alSoltarToque)
-      cancelAnimationFrame(e.current.idRaf)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('touchstart', onTouch)
+      window.removeEventListener('touchmove', onTouch)
+      window.removeEventListener('touchend', onTouchEnd)
+      cancelAnimationFrame(st.idRaf)
+
+      // Dispose renderer + scene
       renderizador.dispose()
-      if(contenedorDOM.contains(renderizador.domElement)) {
-          contenedorDOM.removeChild(renderizador.domElement)
+      if (contenedorDOM.contains(renderizador.domElement)) {
+        contenedorDOM.removeChild(renderizador.domElement)
       }
       escena.traverse((obj: any) => {
         if (obj.geometry) obj.geometry.dispose()
@@ -260,12 +249,18 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
       })
       escena.clear()
     }
+  // referenciaBurbuja es un ref estable; alCargar se lee via alCargarRef
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const alHacerClick = () => {
-    window.open('https://wa.me/573000000000', '_blank')
-  }
+  const alHacerClick = () => window.open('https://wa.me/573000000000', '_blank')
 
-  return <div ref={referenciaContenedor} onClick={alHacerClick} style={{ width: '100%', height: '100%', position: 'relative', cursor: 'pointer' }} className="orbit-container" />
+  return (
+    <div
+      ref={referenciaContenedor}
+      onClick={alHacerClick}
+      style={{ width: '100%', height: '100%', position: 'relative', cursor: 'pointer' }}
+      className="orbit-container"
+    />
+  )
 }

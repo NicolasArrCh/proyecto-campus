@@ -1,0 +1,208 @@
+/* ═══════════════════════════════════════════
+   SkillsTabs — tech / tools / soft-skills
+   ═══════════════════════════════════════════ */
+
+.skills-container {
+  margin-top: 2rem;
+}
+
+/* ── Tab bar ────────────────────────────────── */
+.skills-tab-bar {
+  display: flex;
+  gap: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 5px;
+  max-width: 560px;
+  margin: 0 auto 2rem;
+}
+
+.skills-tab-btn {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.skills-tab-btn:hover {
+  color: var(--color-text-primary);
+}
+
+.skills-tab-btn.active {
+  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.45);
+}
+
+/* ── Tab panel base ─────────────────────────── */
+.tab-panel {
+  width: 100%;
+}
+
+/* ── TÉCNICAS: 3-column category cards ───────── */
+.tecnicas-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.tech-cat-card {
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.cat-lenguajes  { background: rgba(12, 16, 35, 0.75); }
+.cat-bases      { background: rgba(10, 28, 20, 0.75); }
+.cat-frameworks { background: rgba(20, 10, 35, 0.75); }
+
+.tech-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.tech-cat-symbol {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tech-cat-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* ── Icon grid inside tech cards ─────────────── */
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.icon-grid.cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.skill-icon-tile {
+  border-radius: 10px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  font-size: 1.05rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.3s ease;
+}
+
+.skill-icon-tile:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* ── HERRAMIENTAS ─────────────────────────────── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.tool-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(15, 20, 38, 0.6);
+  cursor: default;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.tool-tile:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(20, 28, 55, 0.8);
+}
+
+.tool-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.tool-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-text-primary);
+}
+
+/* ── HABILIDADES BLANDAS ──────────────────────── */
+.blandas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.blanda-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.5rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(15, 20, 38, 0.6);
+  cursor: default;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.blanda-tile:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(20, 28, 55, 0.8);
+}
+
+.blanda-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.blanda-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: var(--color-text-primary);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 640px) {
+  .skills-tab-bar { max-width: 100%; }
+  .skills-tab-btn { font-size: 0.78rem; padding: 0.5rem 0.6rem; }
+  .tools-grid, .blandas-grid { grid-template-columns: repeat(2, 1fr); }
+  .tecnicas-panel { grid-template-columns: 1fr; }
+}

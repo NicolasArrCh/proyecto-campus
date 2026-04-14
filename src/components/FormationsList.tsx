@@ -59,7 +59,8 @@ const FormationsList = () => {
   return (
     <div className="formations-section">
       <div className="section-header">
-        <h2 className="section-title">Programas y Formaciones</h2>
+        <h2 className="section-title">Formación Intensiva</h2>
+        <p className="formations-subtitle">Dos jornadas de alto rendimiento. Un solo destino: el mercado global de tecnología.</p>
         <div className="title-underline"></div>
       </div>
 
