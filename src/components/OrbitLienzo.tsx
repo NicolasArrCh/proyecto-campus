@@ -253,7 +253,7 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const alHacerClick = () => window.open('https://wa.me/573000000000', '_blank')
+  const alHacerClick = () => window.open('https://wa.link/05gr61', '_blank')
 
   return (
     <div

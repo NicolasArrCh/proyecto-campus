@@ -11,6 +11,7 @@ type Formation = {
   courses: string[];
   themeColor: string;
   modalidades?: string[];
+  whatsappLink: string;
 };
 
 const formations: Formation[] = [
@@ -30,7 +31,8 @@ const formations: Formation[] = [
       'Habilidades adaptativas'
     ],
     themeColor: 'blue',
-    modalidades: ['Presencial']
+    modalidades: ['Presencial'],
+    whatsappLink: 'https://wa.link/14xlsa'
   },
   {
     id: 'nocturna',
@@ -45,7 +47,8 @@ const formations: Formation[] = [
       'Habilidades adaptativas'
     ],
     themeColor: 'purple',
-    modalidades: ['Presencial', 'Virtual']
+    modalidades: ['Presencial', 'Virtual'],
+    whatsappLink: 'https://wa.link/xmth5b'
   }
 ];
 
@@ -148,7 +151,7 @@ const FormationsList = () => {
               </div>
 
               <div className="card-footer">
-                <button className="inscribe-btn">Me interesa</button>
+                <button className="inscribe-btn" onClick={() => window.open(formation.whatsappLink, '_blank')}>Me interesa</button>
               </div>
 
               {/* Background Glow */}
