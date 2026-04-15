@@ -509,12 +509,15 @@ button {
 @media (max-width: 640px) {
   /* Navbar */
   .main-navbar {
-    padding: 1rem 1.25rem;
+    padding: 1rem 1rem;
   }
   .nav-brand { font-size: 1.35rem; letter-spacing: 0.06em; }
 
+  /* App content */
+  .app-content { padding-top: 64px; }
+
   /* Back button */
-  .back-btn-container { padding: 1.25rem 1.25rem 0; }
+  .back-btn-container { padding: 1.25rem 1rem 0; }
   .btn-back { font-size: 0.95rem; padding: 0.45rem 1rem; }
 
   /* Hero */
@@ -533,7 +536,7 @@ button {
   }
 
   /* Sections */
-  section { padding: 2.5rem 1rem; }
+  section { padding: 2rem 1rem; }
 
   /* Section titles */
   .section-title { font-size: 1.8rem; }
@@ -542,7 +545,7 @@ button {
   /* Vision/Mission cards */
   .jornada-options-grid { grid-template-columns: 1fr !important; gap: 1.25rem; }
   .vm-card-inner {
-    padding: 1.75rem 1.75rem 1.75rem 2.25rem;
+    padding: 1.5rem 1.25rem 1.5rem 1.75rem;
   }
   .vm-card-inner h3 { font-size: 1.3rem; }
   .vm-card-inner p  { font-size: 0.95rem; }
@@ -562,6 +565,18 @@ button {
 
   /* Primary button */
   .btn-primary { font-size: 0.95rem; padding: 0.65rem 1.25rem; }
+
+  /* Campus features grid */
+  .campus-features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Prevent horizontal overflow on mobile */
+  .programs-grid, .jornada-options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  section { overflow: hidden; }
 }
 
 /* ── Extra small (≤ 420px) ───────────────────────── */
