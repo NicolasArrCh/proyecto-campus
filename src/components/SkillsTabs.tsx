@@ -3,8 +3,9 @@ import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import {
   SiJavascript, SiTypescript, SiPython, SiHtml5, SiCss,
   SiMysql, SiPostgresql, SiMongodb, SiCodeigniter,
-  SiNextdotjs, SiNodedotjs, SiLaravel, SiSpring,
+  SiNextdotjs, SiNodedotjs, SiLaravel, SiSpring, SiSpringboot,
   SiGithub, SiGoogledrive, SiDiscord, SiJira, SiOpenai,
+  SiPhp, SiDotnet
 } from 'react-icons/si';
 import { FaJava } from 'react-icons/fa';
 import { DiDotnet } from 'react-icons/di';        // C# via .NET icon
@@ -25,6 +26,8 @@ const languages: { name: string; Icon: IconComponent; color: string; bg: string 
   { name: 'Python',     Icon: SiPython,     color: '#3776ab', bg: 'rgba(55,118,171,0.10)'  },
   { name: 'Java',       Icon: FaJava,       color: '#e76f00', bg: 'rgba(231,111,0,0.10)'   },
   { name: 'C#',         Icon: DiDotnet,     color: '#9b4f96', bg: 'rgba(155,79,150,0.12)'  },
+  { name: 'PHP',        Icon: SiPhp,        color: '#777bb4', bg: 'rgba(119,123,180,0.10)' },
+  { name: 'Node.js',    Icon: SiNodedotjs,  color: '#3c873a', bg: 'rgba(60,135,58,0.10)'   },
   { name: 'HTML5',      Icon: SiHtml5,      color: '#e34c26', bg: 'rgba(227,76,38,0.10)'   },
   { name: 'CSS3',       Icon: SiCss,        color: '#264de4', bg: 'rgba(38,77,228,0.10)'   },
 ];
@@ -34,15 +37,19 @@ const databases: { name: string; Icon: IconComponent; color: string; bg: string 
   { name: 'MySQL',       Icon: SiMysql,        color: '#00618a', bg: 'rgba(0,97,138,0.12)'   },
   { name: 'PostgreSQL',  Icon: SiPostgresql,   color: '#336791', bg: 'rgba(51,103,145,0.12)' },
   { name: 'MongoDB',     Icon: SiMongodb,      color: '#13aa52', bg: 'rgba(19,170,82,0.10)'  },
-  { name: 'CodeIgniter', Icon: SiCodeigniter,  color: '#ee4323', bg: 'rgba(238,67,35,0.10)'  },
 ];
 
-/* ── Frameworks ───────────────────────────────────────────────── */
-const frameworks: { name: string; Icon: IconComponent; color: string; bg: string }[] = [
-  { name: 'Next.js',  Icon: SiNextdotjs, color: '#e2e8f0', bg: 'rgba(226,232,240,0.06)' },
-  { name: 'Node.js',  Icon: SiNodedotjs, color: '#3c873a', bg: 'rgba(60,135,58,0.10)'   },
-  { name: 'Laravel',  Icon: SiLaravel,   color: '#ff2d20', bg: 'rgba(255,45,32,0.10)'   },
-  { name: 'Spring',   Icon: SiSpring,    color: '#6db33f', bg: 'rgba(109,179,63,0.10)'  },
+/* ── Rutas y Frameworks ───────────────────────────────────────── */
+const rutasLenguajes: { name: string; Icon: IconComponent; color: string; bg: string }[] = [
+  { name: 'PHP',        Icon: SiPhp,        color: '#777bb4', bg: 'rgba(119,123,180,0.10)' },
+  { name: 'Java',       Icon: FaJava,       color: '#e76f00', bg: 'rgba(231,111,0,0.10)' },
+  { name: 'C#',         Icon: DiDotnet,     color: '#9b4f96', bg: 'rgba(155,79,150,0.12)' },
+];
+
+const rutasFrameworks: { name: string; Icon: IconComponent; color: string; bg: string }[] = [
+  { name: 'Laravel',   Icon: SiLaravel,    color: '#ff2d20', bg: 'rgba(255,45,32,0.10)' },
+  { name: 'Spring Boot',Icon: SiSpringboot, color: '#6db33f', bg: 'rgba(109,179,63,0.10)' },
+  { name: '.NET',      Icon: SiDotnet,     color: '#512bd4', bg: 'rgba(81,43,212,0.10)' },
 ];
 
 /* ── Tools ────────────────────────────────────────────────────── */
@@ -146,7 +153,28 @@ const SkillsTabs = () => {
                 <h3>Bases de datos</h3>
               </div>
               <div className="icon-grid cols-2">
-                {databases.map(item => <TechTile key={item.name} {...item} large />)}
+                {databases.map(item => {
+                  if (item.name === 'MongoDB') {
+                    return (
+                      <div key={item.name} style={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'center' }}>
+                        <div style={{ width: 'calc(50% - 0.275rem)' }}>
+                          <TechTile {...item} large />
+                        </div>
+                      </div>
+                    );
+                  }
+                  return <TechTile key={item.name} {...item} large />;
+                })}
+              </div>
+            </div>
+
+            <div className="tech-cat-card cat-rutas">
+              <div className="tech-cat-header">
+                <span className="tech-cat-symbol">🛣️</span>
+                <h3>Rutas</h3>
+              </div>
+              <div className="icon-grid">
+                {rutasLenguajes.map(item => <TechTile key={item.name} {...item} />)}
               </div>
             </div>
 
@@ -155,8 +183,8 @@ const SkillsTabs = () => {
                 <span className="tech-cat-symbol">⚡</span>
                 <h3>Frameworks</h3>
               </div>
-              <div className="icon-grid cols-2">
-                {frameworks.map(item => <TechTile key={item.name} {...item} large />)}
+              <div className="icon-grid">
+                {rutasFrameworks.map(item => <TechTile key={item.name} {...item} />)}
               </div>
             </div>
 

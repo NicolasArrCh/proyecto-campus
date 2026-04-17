@@ -17,13 +17,18 @@
   padding: 0;
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
 body {
   font-family: var(--font-primary);
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   min-height: 100vh;
   margin: 0;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -575,8 +580,6 @@ button {
   .programs-grid, .jornada-options-grid {
     grid-template-columns: 1fr;
   }
-
-  section { overflow: hidden; }
 }
 
 /* ── Extra small (≤ 420px) ───────────────────────── */
@@ -673,6 +676,7 @@ button {
   overflow: hidden;
   cursor: default;
   transition: border-color 0.45s ease, box-shadow 0.45s ease;
+  text-align: center;
 }
 
 /* Shared inner glow layer */
@@ -767,23 +771,15 @@ button {
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 16px;
-  padding: 2.5rem 2.5rem 2.5rem 3rem; /* extra left padding for the bar */
+  padding: 2.5rem; 
   height: 100%;
   box-sizing: border-box;
   overflow: hidden;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
-}
-
-/* ── Left accent bar ─────────────────────────────── */
-.vm-card-inner::before {
-  content: '';
-  position: absolute;
-  top: 12%;
-  left: 0;
-  width: 3px;
-  height: 76%;
-  border-radius: 0 3px 3px 0;
-  transition: height 0.4s ease, opacity 0.4s ease;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* ── Subtle corner radial blob ───────────────────── */
@@ -802,15 +798,11 @@ button {
 }
 
 /* ══ Visión — Gold theme ══════════════════════════ */
-.wrapper-vision .vm-card-inner::before {
-  background: linear-gradient(to bottom, transparent, #e2c070, #f59e0b, #e2c070, transparent);
-}
 .wrapper-vision .vm-card-inner::after {
   background: radial-gradient(circle, rgba(245,158,11,0.4) 0%, transparent 70%);
 }
 .wrapper-vision .vm-card-inner {
   border-top: 1px solid rgba(226, 192, 112, 0.20);
-  border-left: 1px solid rgba(226, 192, 112, 0.10);
 }
 
 /* hover */
@@ -824,19 +816,14 @@ button {
 .wrapper-vision:hover .vm-card-inner {
   border-color: rgba(226, 192, 112, 0.35);
 }
-.wrapper-vision:hover .vm-card-inner::before { height: 90%; }
 .wrapper-vision:hover .vm-card-inner::after  { opacity: 0.80; }
 
 /* ══ Misión — Cyan-blue theme ════════════════════ */
-.wrapper-mision .vm-card-inner::before {
-  background: linear-gradient(to bottom, transparent, #3b82f6, #06b6d4, #3b82f6, transparent);
-}
 .wrapper-mision .vm-card-inner::after {
   background: radial-gradient(circle, rgba(6,182,212,0.4) 0%, transparent 70%);
 }
 .wrapper-mision .vm-card-inner {
   border-top: 1px solid rgba(6, 182, 212, 0.18);
-  border-left: 1px solid rgba(6, 182, 212, 0.08);
 }
 
 /* hover */
@@ -850,7 +837,6 @@ button {
 .wrapper-mision:hover .vm-card-inner {
   border-color: rgba(6, 182, 212, 0.35);
 }
-.wrapper-mision:hover .vm-card-inner::before { height: 90%; }
 .wrapper-mision:hover .vm-card-inner::after  { opacity: 0.80; }
 
 /* ── Typography inside vm cards ──────────────────── */
@@ -872,8 +858,25 @@ button {
 }
 
 .vm-card-inner .jornada-icon {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
-  display: block;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.2rem;
+  margin-bottom: 1.25rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.wrapper-vision .jornada-icon {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05));
+  box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.2);
+}
+
+.wrapper-mision .jornada-icon {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05));
+  box-shadow: inset 0 0 0 1px rgba(6, 182, 212, 0.2);
 }
 
