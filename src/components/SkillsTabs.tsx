@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import {
   SiJavascript, SiTypescript, SiPython, SiHtml5, SiCss,
-  SiMysql, SiPostgresql, SiMongodb, SiCodeigniter,
-  SiNextdotjs, SiNodedotjs, SiLaravel, SiSpring, SiSpringboot,
+  SiMysql, SiPostgresql, SiMongodb,
+  SiNodedotjs, SiLaravel, SiSpringboot,
   SiGithub, SiGoogledrive, SiDiscord, SiJira, SiOpenai,
   SiPhp, SiDotnet
 } from 'react-icons/si';

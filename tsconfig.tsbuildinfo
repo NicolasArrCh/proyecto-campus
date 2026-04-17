@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/formationslist.tsx","./src/components/interactivebackground.tsx","./src/components/loadingscreen.tsx","./src/components/orbitlienzo.tsx","./src/components/skillstabs.tsx"],"errors":true,"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/formationslist.tsx","./src/components/interactivebackground.tsx","./src/components/loadingscreen.tsx","./src/components/orbitlienzo.tsx","./src/components/skillstabs.tsx"],"version":"5.9.3"}
