@@ -28,7 +28,7 @@ const InteractiveBackground = () => {
               value: "transparent",
             },
           },
-          fpsLimit: 60,
+          fpsLimit: window.innerWidth <= 768 ? 30 : 60,
           interactivity: {
             events: {
               onClick: {
@@ -63,7 +63,7 @@ const InteractiveBackground = () => {
             links: {
               color: "#a0a8ba", 
               distance: 120, // Menos distancia = muchos menos cálculos
-              enable: true,
+              enable: window.innerWidth > 768, // Se apagan las líneas de red interconectora en móvil. El polvo estelar se mantiene.
               opacity: 0.2,
               width: 1,
             },

@@ -65,9 +65,17 @@ section {
   position: absolute;
   border-radius: 50%;
   filter: blur(120px);
+  will-change: transform;
   z-index: -1;
   pointer-events: none;
   opacity: 0.28;
+}
+
+@media (max-width: 768px) {
+  .section-bg-orb {
+    filter: blur(80px);
+    animation: none !important;
+  }
 }
 
 .orb-primary {
