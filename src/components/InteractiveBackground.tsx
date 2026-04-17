@@ -83,7 +83,7 @@ const InteractiveBackground = () => {
                 width: 800,
                 height: 800
               },
-              value: 40, // 40 es el balance perfecto para verse profesional sin laggear
+              value: window.innerWidth <= 768 ? 15 : 40, // 40 es el balance perfecto para verse profesional sin laggear
             },
             opacity: {
               value: 0.5,

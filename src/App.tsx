@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import LoadingScreen from './components/LoadingScreen';
 import FormationsList from './components/FormationsList';
 import InteractiveBackground from './components/InteractiveBackground';
-import { OrbitLienzo } from './components/OrbitLienzo';
 import SkillsTabs from './components/SkillsTabs';
+
+const OrbitLienzo = lazy(() => import('./components/OrbitLienzo').then(module => ({ default: module.OrbitLienzo })));
 
 function App() {
   const [isLoading, setIsLoading]       = useState(true);
@@ -12,6 +13,7 @@ function App() {
   const [history, setHistory]           = useState(['inicio']);
   const [isMascotLoaded, setIsMascotLoaded] = useState(false);
   const [navVisible, setNavVisible]     = useState(true);
+  const [load3D, setLoad3D]             = useState(false);
 
   const bubbleRef        = useRef<HTMLDivElement>(null);
   const lastScrollRef    = useRef(0);
@@ -21,7 +23,12 @@ function App() {
   /* ── Loading timer ──────────────────────────────────────────── */
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
-    return () => clearTimeout(timer);
+    // Empezar a decodificar modelo pesado y cargar dependencias ThreeJS 500ms después de liberar la UI general
+    const d3Timer = setTimeout(() => setLoad3D(true), 2500); 
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(d3Timer);
+    };
   }, []);
 
   /* ── Navbar scroll behaviour ────────────────────────────────────
@@ -150,10 +157,14 @@ function App() {
               className="hero-mascot-placeholder relative z-10"
               style={{ position: 'relative', width: '100%', maxWidth: '500px', aspectRatio: '1/1' }}
             >
-              <OrbitLienzo
-                alCargar={() => setIsMascotLoaded(true)}
-                referenciaBurbuja={bubbleRef}
-              />
+              {load3D ? (
+                <Suspense fallback={<div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#66ccff' }}>Configurando visor interactivo...</div>}>
+                  <OrbitLienzo
+                    alCargar={() => setIsMascotLoaded(true)}
+                    referenciaBurbuja={bubbleRef}
+                  />
+                </Suspense>
+              ) : null}
 
               <div
                 ref={bubbleRef}

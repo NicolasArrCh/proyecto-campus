@@ -47,7 +47,8 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
     const _v3 = new THREE.Vector3()
 
     // ─── Renderer ─────────────────────────────────────────────────────────────
-    renderizador.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    const isMobile = window.innerWidth <= 768
+    renderizador.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1) : Math.min(window.devicePixelRatio, 2))
     renderizador.toneMapping = THREE.ACESFilmicToneMapping
     renderizador.toneMappingExposure = 1.8
     contenedorDOM.appendChild(renderizador.domElement)
@@ -88,49 +89,51 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
       st.objetoPrincipal = contenedor
 
       // Inyección de shaders
-      gltf.scene.traverse((hijo) => {
-        if ((hijo as THREE.Mesh).isMesh) {
-          const malla = hijo as THREE.Mesh
-          if (malla.material) {
-            const mats = Array.isArray(malla.material) ? malla.material : [malla.material]
-            mats.forEach((mat) => {
-              mat.onBeforeCompile = (shader) => {
-                shader.uniforms.uTime  = st.uniformesMat.uTime
-                shader.uniforms.uMouse = st.uniformesMat.uMouse
-                shader.vertexShader = `
-                  uniform float uTime;
-                  uniform vec3 uMouse;
-                  varying float vDist;
-                  ${shader.vertexShader}
-                `
-                shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', `
-                  #include <begin_vertex>
-                  vec4 pGlobal = modelMatrix * vec4(position, 1.0);
-                  vDist = distance(pGlobal.xyz, uMouse);
-                  float d = smoothstep(2.5, 0.0, vDist);
-                  transformed += normal * (sin(uTime * 15.0 + vDist * 10.0) * 0.04 * d);
-                  transformed += (uMouse - pGlobal.xyz) * 0.1 * d;
-                `)
-                shader.fragmentShader = `
-                  varying float vDist;
-                  ${shader.fragmentShader}
-                `
-                shader.fragmentShader = shader.fragmentShader.replace('#include <dithering_fragment>', `
-                  #include <dithering_fragment>
-                  float gBrillo = smoothstep(1.5, 0.0, vDist);
-                  gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.0, 0.7, 1.0) * 2.5, gBrillo * 0.6);
-                `)
-              }
-            })
+      if (!isMobile) {
+        gltf.scene.traverse((hijo) => {
+          if ((hijo as THREE.Mesh).isMesh) {
+            const malla = hijo as THREE.Mesh
+            if (malla.material) {
+              const mats = Array.isArray(malla.material) ? malla.material : [malla.material]
+              mats.forEach((mat) => {
+                mat.onBeforeCompile = (shader) => {
+                  shader.uniforms.uTime  = st.uniformesMat.uTime
+                  shader.uniforms.uMouse = st.uniformesMat.uMouse
+                  shader.vertexShader = `
+                    uniform float uTime;
+                    uniform vec3 uMouse;
+                    varying float vDist;
+                    ${shader.vertexShader}
+                  `
+                  shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', `
+                    #include <begin_vertex>
+                    vec4 pGlobal = modelMatrix * vec4(position, 1.0);
+                    vDist = distance(pGlobal.xyz, uMouse);
+                    float d = smoothstep(2.5, 0.0, vDist);
+                    transformed += normal * (sin(uTime * 15.0 + vDist * 10.0) * 0.04 * d);
+                    transformed += (uMouse - pGlobal.xyz) * 0.1 * d;
+                  `)
+                  shader.fragmentShader = `
+                    varying float vDist;
+                    ${shader.fragmentShader}
+                  `
+                  shader.fragmentShader = shader.fragmentShader.replace('#include <dithering_fragment>', `
+                    #include <dithering_fragment>
+                    float gBrillo = smoothstep(1.5, 0.0, vDist);
+                    gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.0, 0.7, 1.0) * 2.5, gBrillo * 0.6);
+                  `)
+                }
+              })
+            }
           }
-        }
-      })
+        })
+      }
 
       if (alCargarRef.current) alCargarRef.current()
     })
 
     // ─── Satélites / partículas ───────────────────────────────────────────────
-    const cantSat = 400
+    const cantSat = isMobile ? 80 : 400
     const arrPosSat = new Float32Array(cantSat * 3)
     for (let i = 0; i < cantSat; i++) {
       const radio = 4 + Math.random() * 3
