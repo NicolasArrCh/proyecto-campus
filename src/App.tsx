@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import LoadingScreen from './components/LoadingScreen';
-import FormationsList from './components/FormationsList';
 import InteractiveBackground from './components/InteractiveBackground';
-import SkillsTabs from './components/SkillsTabs';
+
+const FormationsList = lazy(() => import('./components/FormationsList'));
+const SkillsTabs = lazy(() => import('./components/SkillsTabs'));
 
 const OrbitLienzo = lazy(() => import('./components/OrbitLienzo').then(module => ({ default: module.OrbitLienzo })));
 
@@ -262,13 +263,14 @@ function App() {
                   </p>
                 </div>
 
-                {/* Jornadas */}
-                <div className="formations-list-container">
-                  <FormationsList />
-                </div>
+                {/* Rutas (Lazy Loaded) */}
+                <Suspense fallback={<div style={{ textAlign: 'center', padding: '3rem', color: '#61dafb' }}>Cargando contenido...</div>}>
+                  <div className="formations-list-container">
+                    <FormationsList />
+                  </div>
 
-                {/* Skills tabs */}
-                <SkillsTabs />
+                  <SkillsTabs />
+                </Suspense>
 
                 {/* Campus features */}
                 <div style={{ marginTop: '3rem' }}>

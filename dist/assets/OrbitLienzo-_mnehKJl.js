@@ -1,4 +1,4 @@
-import{r as ur,j as Kc}from"./index-Bw2ZuMw5.js";/**
+import{r as ur,j as Kc}from"./framer-DnDDgard.js";/**
  * @license
  * Copyright 2010-2026 Three.js Authors
  * SPDX-License-Identifier: MIT
