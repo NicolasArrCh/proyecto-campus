@@ -3,9 +3,9 @@ import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import {
   SiJavascript, SiTypescript, SiPython, SiHtml5, SiCss,
   SiMysql, SiPostgresql, SiMongodb,
-  SiNodedotjs, SiLaravel, SiSpringboot,
+  SiNodedotjs, SiLaravel, SiSpringboot, SiExpress,
   SiGithub, SiGoogledrive, SiDiscord, SiJira, SiOpenai,
-  SiPhp, SiDotnet
+  SiPhp, SiDotnet, SiGit
 } from 'react-icons/si';
 import { FaJava } from 'react-icons/fa';
 import { DiDotnet } from 'react-icons/di';        // C# via .NET icon
@@ -13,6 +13,7 @@ import { VscCode } from 'react-icons/vsc';         // VS Code icon (vsc set)
 import {
   Heart, Lightbulb, Crown, MessageCircle,
   Users, RefreshCw, Target, Clock, Brain,
+  Kanban, AppWindow, Server
 } from 'lucide-react';
 import './SkillsTabs.css';
 
@@ -22,14 +23,13 @@ type IconComponent = React.ComponentType<{ size?: number; color?: string; classN
 /* ── Languages ────────────────────────────────────────────────── */
 const languages: { name: string; Icon: IconComponent; color: string; bg: string }[] = [
   { name: 'JavaScript', Icon: SiJavascript, color: '#f7df1e', bg: 'rgba(247,223,30,0.10)'  },
-  { name: 'TypeScript', Icon: SiTypescript, color: '#3178c6', bg: 'rgba(49,120,198,0.10)'  },
   { name: 'Python',     Icon: SiPython,     color: '#3776ab', bg: 'rgba(55,118,171,0.10)'  },
-  { name: 'Java',       Icon: FaJava,       color: '#e76f00', bg: 'rgba(231,111,0,0.10)'   },
-  { name: 'C#',         Icon: DiDotnet,     color: '#9b4f96', bg: 'rgba(155,79,150,0.12)'  },
-  { name: 'PHP',        Icon: SiPhp,        color: '#777bb4', bg: 'rgba(119,123,180,0.10)' },
-  { name: 'Node.js',    Icon: SiNodedotjs,  color: '#3c873a', bg: 'rgba(60,135,58,0.10)'   },
   { name: 'HTML5',      Icon: SiHtml5,      color: '#e34c26', bg: 'rgba(227,76,38,0.10)'   },
   { name: 'CSS3',       Icon: SiCss,        color: '#264de4', bg: 'rgba(38,77,228,0.10)'   },
+  { name: 'Git',        Icon: SiGit,        color: '#f05032', bg: 'rgba(240,80,50,0.12)'   },
+  { name: 'Scrum',      Icon: Kanban,       color: '#008ad7', bg: 'rgba(0,138,215,0.12)'   },
+  { name: 'Intro al Frontend', Icon: AppWindow,color: '#61dafb', bg: 'rgba(97,218,251,0.12)'},
+  { name: 'Intro al Backend',  Icon: Server,   color: '#4caf50', bg: 'rgba(76,175,80,0.12)'   },
 ];
 
 /* ── Databases ────────────────────────────────────────────────── */
@@ -41,15 +41,17 @@ const databases: { name: string; Icon: IconComponent; color: string; bg: string 
 
 /* ── Rutas y Frameworks ───────────────────────────────────────── */
 const rutasLenguajes: { name: string; Icon: IconComponent; color: string; bg: string }[] = [
+  { name: 'Node.js',    Icon: SiNodedotjs,  color: '#3c873a', bg: 'rgba(60,135,58,0.10)'   },
   { name: 'PHP',        Icon: SiPhp,        color: '#777bb4', bg: 'rgba(119,123,180,0.10)' },
-  { name: 'Java',       Icon: FaJava,       color: '#e76f00', bg: 'rgba(231,111,0,0.10)' },
-  { name: 'C#',         Icon: DiDotnet,     color: '#9b4f96', bg: 'rgba(155,79,150,0.12)' },
+  { name: 'Java',       Icon: FaJava,       color: '#e76f00', bg: 'rgba(231,111,0,0.10)'   },
+  { name: 'C#',         Icon: DiDotnet,     color: '#9b4f96', bg: 'rgba(155,79,150,0.12)'  },
 ];
 
 const rutasFrameworks: { name: string; Icon: IconComponent; color: string; bg: string }[] = [
-  { name: 'Laravel',   Icon: SiLaravel,    color: '#ff2d20', bg: 'rgba(255,45,32,0.10)' },
+  { name: 'Express.js',Icon: SiExpress,    color: '#ffffff', bg: 'rgba(255,255,255,0.12)' },
+  { name: 'Laravel',   Icon: SiLaravel,    color: '#ff2d20', bg: 'rgba(255,45,32,0.10)'   },
   { name: 'Spring Boot',Icon: SiSpringboot, color: '#6db33f', bg: 'rgba(109,179,63,0.10)' },
-  { name: '.NET',      Icon: SiDotnet,     color: '#512bd4', bg: 'rgba(81,43,212,0.10)' },
+  { name: '.NET',      Icon: SiDotnet,     color: '#512bd4', bg: 'rgba(81,43,212,0.10)'   },
 ];
 
 /* ── Tools ────────────────────────────────────────────────────── */
@@ -140,7 +142,7 @@ const SkillsTabs = () => {
             <div className="tech-cat-card cat-lenguajes">
               <div className="tech-cat-header">
                 <span className="tech-cat-symbol">&lt;/&gt;</span>
-                <h3>Lenguajes</h3>
+                <h3>Lenguajes y Conocimientos</h3>
               </div>
               <div className="icon-grid">
                 {languages.map(item => <TechTile key={item.name} {...item} />)}
