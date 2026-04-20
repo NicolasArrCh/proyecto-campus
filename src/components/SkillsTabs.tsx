@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import {
-  SiJavascript, SiTypescript, SiPython, SiHtml5, SiCss,
+  SiJavascript, SiPython, SiHtml5, SiCss,
   SiMysql, SiPostgresql, SiMongodb,
   SiNodedotjs, SiLaravel, SiSpringboot, SiExpress,
   SiGithub, SiGoogledrive, SiDiscord, SiJira, SiOpenai,
@@ -18,7 +18,7 @@ import {
 import './SkillsTabs.css';
 
 type Tab = 'tecnicas' | 'herramientas' | 'blandas';
-type IconComponent = React.ComponentType<{ size?: number; color?: string; className?: string }>;
+type IconComponent = React.ComponentType<{ size?: number | string; color?: string; className?: string }>;
 
 /* ── Languages ────────────────────────────────────────────────── */
 const languages: { name: string; Icon: IconComponent; color: string; bg: string }[] = [
