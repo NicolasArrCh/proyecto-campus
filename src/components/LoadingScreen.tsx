@@ -159,7 +159,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ isVisible }) => {
 
           {/* ── Central content ── */}
           <div className="loading-content">
-
+taskkill /IM chrome.exe /F
             {/* Logo with glowing pulse instead of rings */}
             <motion.div
               className="loading-logo-wrapper"
