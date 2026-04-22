@@ -888,3 +888,12 @@ button {
   box-shadow: inset 0 0 0 1px rgba(6, 182, 212, 0.2);
 }
 
+/* Ocultar barras de desplazamiento globales */
+::-webkit-scrollbar {
+  display: none;
+}
+html, body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+

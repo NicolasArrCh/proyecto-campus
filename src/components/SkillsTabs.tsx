@@ -4,7 +4,7 @@ import {
   SiJavascript, SiPython, SiHtml5, SiCss,
   SiMysql, SiPostgresql, SiMongodb,
   SiNodedotjs, SiLaravel, SiSpringboot, SiExpress,
-  SiGithub, SiGoogledrive, SiDiscord, SiJira, SiOpenai,
+  SiGithub, SiGoogledrive, SiDiscord, SiJira, SiGooglegemini,
   SiPhp, SiDotnet, SiGit
 } from 'react-icons/si';
 import { FaJava } from 'react-icons/fa';
@@ -60,7 +60,7 @@ const tools: { name: string; Icon: IconComponent; color: string; bg: string }[] 
   { name: 'Drive',   Icon: SiGoogledrive,  color: '#4285f4', bg: 'rgba(66,133,244,0.10)'  },
   { name: 'Discord', Icon: SiDiscord,      color: '#5865f2', bg: 'rgba(88,101,242,0.12)'  },
   { name: 'Jira',    Icon: SiJira,         color: '#0052cc', bg: 'rgba(0,82,204,0.12)'    },
-  { name: 'ChatGPT', Icon: SiOpenai,       color: '#10a37f', bg: 'rgba(16,163,127,0.10)'  },
+  { name: 'GeminiAI',Icon: SiGooglegemini, color: '#1B6EF3', bg: 'rgba(27,110,243,0.10)'  },
   { name: 'VS Code', Icon: VscCode,        color: '#007acc', bg: 'rgba(0,122,204,0.12)'   },
 ];
 
@@ -72,7 +72,7 @@ const softSkills = [
   { name: 'COMUNICACIÓN',        Icon: MessageCircle, color: '#3b82f6' },
   { name: 'TRABAJO EN EQUIPO',   Icon: Users,         color: '#8b5cf6' },
   { name: 'ADAPTABILIDAD',       Icon: RefreshCw,     color: '#10b981' },
-  { name: 'RESOLUCIÓN',          Icon: Target,        color: '#ef4444' },
+  { name: 'RESOLUCIÓN DE PROBLEMAS', Icon: Target,    color: '#ef4444' },
   { name: 'GESTIÓN TIEMPO',      Icon: Clock,         color: '#f97316' },
   { name: 'PENS. CRÍTICO',       Icon: Brain,         color: '#a855f7' },
 ];

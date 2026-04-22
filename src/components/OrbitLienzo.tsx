@@ -129,6 +129,10 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
         })
       }
 
+      if (isMobile) {
+        animar();
+      }
+
       if (alCargarRef.current) alCargarRef.current()
     })
 
@@ -160,6 +164,9 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
         camara.aspect = width / height
         camara.updateProjectionMatrix()
         renderizador.setSize(width, height)
+        if (isMobile) {
+          animar();
+        }
       }
     })
     resizeObserver.observe(contenedorDOM)
@@ -184,30 +191,40 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
 
     // ─── Loop de animación ────────────────────────────────────────────────────
     const animar = () => {
-      st.idRaf = requestAnimationFrame(animar)
+      if (!isMobile) {
+        st.idRaf = requestAnimationFrame(animar)
+      }
       const t = st.reloj.getElapsedTime()
       st.uniformesMat.uTime.value = t
 
-      st.raycaster.setFromCamera(st.mouseNDC, camara)
-      if (st.raycaster.ray.intersectPlane(st.plano, _v3)) {
-        st.mouseGlobal.lerp(_v3, 0.1)
-        st.uniformesMat.uMouse.value.copy(st.mouseGlobal)
-        if (st.luzMouse) {
-          st.luzMouse.position.copy(st.mouseGlobal)
-          st.luzMouse.position.z = 2
-          st.luzMouse.intensity  = 15 + Math.sin(t * 10) * 5
+      if (!isMobile) {
+        st.raycaster.setFromCamera(st.mouseNDC, camara)
+        if (st.raycaster.ray.intersectPlane(st.plano, _v3)) {
+          st.mouseGlobal.lerp(_v3, 0.1)
+          st.uniformesMat.uMouse.value.copy(st.mouseGlobal)
+          if (st.luzMouse) {
+            st.luzMouse.position.copy(st.mouseGlobal)
+            st.luzMouse.position.z = 2
+            st.luzMouse.intensity  = 15 + Math.sin(t * 10) * 5
+          }
         }
       }
 
-      const rotY = st.mouseNDC.x * 0.3 + Math.sin(t * 0.5) * 0.05
-      const rotX = -st.mouseNDC.y * 0.2 + Math.cos(t * 0.8) * 0.02
+      const rotY = !isMobile ? st.mouseNDC.x * 0.3 + Math.sin(t * 0.5) * 0.05 : 0
+      const rotX = !isMobile ? -st.mouseNDC.y * 0.2 + Math.cos(t * 0.8) * 0.02 : 0
 
       if (st.objetoPrincipal) {
-        st.objetoPrincipal.rotation.y += (-Math.PI / 2 + rotY - st.objetoPrincipal.rotation.y) * 0.05
-        st.objetoPrincipal.rotation.x += (rotX - st.objetoPrincipal.rotation.x) * 0.05
-        st.objetoPrincipal.position.y  = Math.sin(t * 1.5) * 0.1
+        if (!isMobile) {
+          st.objetoPrincipal.rotation.y += (-Math.PI / 2 + rotY - st.objetoPrincipal.rotation.y) * 0.05
+          st.objetoPrincipal.rotation.x += (rotX - st.objetoPrincipal.rotation.x) * 0.05
+          st.objetoPrincipal.position.y  = Math.sin(t * 1.5) * 0.1
+        } else {
+          st.objetoPrincipal.rotation.y = -Math.PI / 2
+          st.objetoPrincipal.rotation.x = 0
+          st.objetoPrincipal.position.y = 0
+        }
       }
-      if (st.satelites) {
+      if (st.satelites && !isMobile) {
         st.satelites.rotation.y += (rotY * 0.8 - st.satelites.rotation.y) * 0.02
         st.satelites.rotation.x += (rotX * 0.8 - st.satelites.rotation.x) * 0.02
       }
@@ -227,7 +244,10 @@ export const OrbitLienzo: React.FC<PropiedadesLienzo> = ({ alCargar, referenciaB
 
       renderizador.render(escena, camara)
     }
-    animar()
+
+    if (!isMobile) {
+      animar()
+    }
 
     // ─── Cleanup (también corre en StrictMode al desmontar el 1er mount) ──────
     return () => {
