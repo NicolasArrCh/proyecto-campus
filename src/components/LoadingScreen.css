@@ -168,6 +168,20 @@
 }
 
 /* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Alivio brutal de Fill-rate para GPUs móviles (ej: Mali-G52) */
+  .loading-ambient-orb {
+    filter: blur(30px); /* De 90px a 30px es una gran diferencia matemática */
+  }
+  .loading-logo-glow {
+    filter: blur(12px);
+  }
+  .loading-logo-img {
+    /* Quitar el doble drop-shadow super pesado */
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6));
+  }
+}
+
 @media (max-width: 480px) {
   .loading-brand-title {
     font-size: 2.2rem;

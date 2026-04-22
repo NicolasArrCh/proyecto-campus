@@ -50,7 +50,8 @@ const ParticleCanvas: React.FC = () => {
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      particlesRef.current = createParticles(canvas.width, canvas.height, 90);
+      const isMobile = window.innerWidth <= 768;
+      particlesRef.current = createParticles(canvas.width, canvas.height, isMobile ? 25 : 90);
     };
 
     resize();
@@ -60,21 +61,26 @@ const ParticleCanvas: React.FC = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const particles = particlesRef.current;
 
-      // Draw connection lines between close particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(59, 130, 246, ${(1 - dist / 120) * 0.12})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-            ctx.restore();
+      // Detect mobile frame context
+      const isMobileFrame = canvas.width <= 768;
+
+      // Draw connection lines between close particles (ONLY on desktop)
+      if (!isMobileFrame) {
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.save();
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(59, 130, 246, ${(1 - dist / 120) * 0.12})`;
+              ctx.lineWidth = 0.5;
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.stroke();
+              ctx.restore();
+            }
           }
         }
       }
