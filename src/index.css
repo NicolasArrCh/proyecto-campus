@@ -17,10 +17,8 @@
   padding: 0;
 }
 
-html, body {
-  overflow-x: hidden;
+html {
   width: 100%;
-  position: relative;
 }
 
 body {
@@ -29,6 +27,9 @@ body {
   color: var(--color-text-primary);
   min-height: 100vh;
   margin: 0;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

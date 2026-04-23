@@ -26,7 +26,8 @@ const formations: Formation[] = [
     ],
     duration: '10 meses',
     courses: [
-      'Desarrollo de software (programación e inteligencia artificial aplicada)',
+      'Desarrollo de software',
+      'Inteligencia artificial aplicada',
       'Inglés',
       'Habilidades adaptativas'
     ],
@@ -43,11 +44,12 @@ const formations: Formation[] = [
     ],
     duration: '13 meses',
     courses: [
-      'Desarrollo de software (programación e inteligencia artificial aplicada)',
+      'Desarrollo de software',
+      'Inteligencia artificial aplicada',
       'Habilidades adaptativas'
     ],
     themeColor: 'purple',
-    modalidades: ['Presencial', 'Virtual'],
+    modalidades: ['Presencial', 'Virtual', 'Híbrida'],
     whatsappLink: 'https://wa.link/xmth5b'
   }
 ];
@@ -140,7 +142,7 @@ const FormationsList = () => {
                 {/* Cursos */}
                 <div className="info-block">
                   <div className="info-header">
-                    <BookOpen size={16} /> <span>Cursos Incluidos</span>
+                    <BookOpen size={16} /> <span>Temáticas</span>
                   </div>
                   <ul className="bullet-list">
                     {formation.courses.map((course, i) => (
